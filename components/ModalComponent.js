@@ -295,7 +295,6 @@ export default function ModalComponent(props){
                       <div>
                         <p className="comment-text">{comment.text}</p>
                         <div className="comment-footer">
-                          {console.log(comment)}
                           <Link class="inline-flex hover:underline" href={`/profile/${comment.user.username }`}>
                             <span>by</span>
                             <img className="w-4 h-4 rounded-full ml-1 mt-0.5 mr-1 " src={`/images/${comment.user.picture}`} alt="user photo" />

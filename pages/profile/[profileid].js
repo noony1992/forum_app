@@ -35,7 +35,7 @@ const Profile = ({ dirs }) => {
       fetch(`/api/profile/${profileUsername.profileid}`)
         .then((response) => response.json())
         .then((data) => setProfile(data));
-  }, [profileUsername.profileid]); 
+  }, [profileUsername.profileid, selectedThread]); 
 
 
 const openModal = (thread) => {
