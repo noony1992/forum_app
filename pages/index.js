@@ -88,9 +88,7 @@ export default function Home() {
     <div className="">
       <div>
         {/* Thread list */}
-        {isLoading ? ( // Render loading icon while isLoading is true
-          <div>Loading...</div>
-        ) : (
+        
           <ul className="container max-w-5xl mx-auto px-4 py-8 divide-y divide-gray-200">
             <div class="inline-flex w-full">
           <input
@@ -108,6 +106,10 @@ export default function Home() {
             </button>
             </div>
             <h2 className="text-2xl font-bold mb-2">Threads</h2>
+            {isLoading ? ( // Render loading icon while isLoading is true
+          <div>Loading...</div>
+            ) : (
+              <>
             {threads.map((thread) => (        
               thread && (         
                 <li key={thread.id} className="py-2">
@@ -153,9 +155,11 @@ export default function Home() {
                 </li>
               )
             ))}
+            </>
+            )}
             
           </ul>
-        )}
+        
         {/* Modal */}
         <ModalComponent 
           isModalOpen={isModalOpen} 
