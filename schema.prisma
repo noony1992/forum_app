@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:data/forum1.db"
+}
+
+model comments {
+  id        Int      @id @unique(map: "sqlite_autoindex_comments_1") @default(autoincrement())
+  threadid  Int      
+  text      String
+  createdAt String    
+  author    Int      
+  thread    thread   @relation(fields: [threadid], references: [id]) 
+  user      user     @relation(fields: [author], references: [id])
+}
+
+model thread {
+  id        Int      @id @unique(map: "sqlite_autoindex_thread_1") @default(autoincrement())
+  title     String
+  createdAt String 
+  author    Int
+  comments  comments[]
+  user      user     @relation(fields: [author], references: [id])
+}
+
+model user {
+  id Int    @id @unique @default(autoincrement())
+  username String @unique
+  password String 
+  admin    Boolean @default(false)
+  picture  String @default("person.png")
+  email    String?
+  threads  thread[]
+  comments comments[]
+  profile  profile?
+}
+
+model profile{
+  id     Int   @id @unique @default(autoincrement())
+  userid Int   @unique
+  user   user  @relation(fields: [userid], references: [id])
+}

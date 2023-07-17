@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f0f0f0;
+  }
+  
+  .modal-close {
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .modal-body {
+    margin-top: 1rem;
+  }
+  
+  .comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .comment-text {
+    flex: 1;
+    margin-right: 1rem;
+    font-size: 16px;
+  }
+  
+  .comment-author {
+    font-weight: bold;
+    font-size: 14px;
+    color: gray;
+  }
+
+  .comment-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: gray;
+  }
+  
+  .comment-timestamp {
+    margin-left: 1rem;
+  }
+
+  .login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .login-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .login-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .login-wrapper .input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+.profile-comment-container{
+  background-color: rgb(241, 241, 241);
+  border-radius: 5px;
+  padding: 5px 9px;
+  font-size: 15px;
+  font-weight: 400
+}
