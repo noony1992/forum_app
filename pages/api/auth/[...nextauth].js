@@ -31,6 +31,7 @@ export default NextAuth({
       },
     }),
   ],
+  secret: process.env.NEXT_PUBLIC_SECRET,
   pages: {
       signIn: "/login", //Need to define custom login page (if using)
   },
