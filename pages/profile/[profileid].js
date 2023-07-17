@@ -124,7 +124,7 @@ const openModal = (thread) => {
                             className="z-999 hover:bg-gray-200 rounded p-0.5"
                             onClick={(e) => {
                               e.stopPropagation();
-                              Router.push(`http://localhost:3000/profile/${thread.user.username}`);
+                              Router.push(`/profile/${thread.user.username}`);
                             }}
                           >
                             <h5 className="text-sm italic text-gray-500 inline-flex">

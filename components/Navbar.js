@@ -10,7 +10,7 @@ function Navbar(){
     useEffect(() => {
       if (session.status === "unauthenticated") {
         // Redirect to login if user is not authenticated
-        Router.push('http://localhost:3000/login');
+        Router.push('/login');
       }
     }, [session]);
 
