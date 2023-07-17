@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:data/forum1.db"
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
 }
 
 model comments {
