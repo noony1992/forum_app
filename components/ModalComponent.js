@@ -1,6 +1,8 @@
 import Modal from 'react-modal';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ModalComponent(props){
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -47,7 +49,7 @@ export default function ModalComponent(props){
         text: editedCommentText,
         threadId: selectedThread.id,
       };
-
+      toast.info("Posting Comment...", {containerId: 'B'});
       fetch(`/api/comments`, {
         method: 'PUT',
         headers: {
@@ -67,6 +69,11 @@ export default function ModalComponent(props){
           setEditedCommentId(null);
           setEditedCommentText('');
           setIsEditingComment(false);
+          toast.success("Comment Posted!", {containerId: 'B'});
+        })
+        .catch((error) => {
+          console.error('Error posting comment:', error);
+          toast.error("Error posting comment. Please try again later.", {containerId: 'B'});
         });
     } else {
       const newComment = {
@@ -75,7 +82,7 @@ export default function ModalComponent(props){
         text: newCommentText,
         threadId: selectedThread.id,
       };
-
+      toast.info("Posting Comment...", {containerId: 'B'});
       fetch(`/api/comments`, {
         method: 'POST',
         headers: {
@@ -89,6 +96,11 @@ export default function ModalComponent(props){
           updatedThread.comments.push(data);
           setSelectedThread(updatedThread);
           setNewCommentText('');
+          toast.success("Comment Posted!", {containerId: 'B'});
+        })
+        .catch((error) => {
+          console.error('Error posting comment:', error);
+          toast.error("Error posting comment. Please try again later.", {containerId: 'B'});
         });
     }
   };
@@ -97,6 +109,7 @@ export default function ModalComponent(props){
     if (editedTitle.trim() === '') {
       return;
     }
+    toast.info("Editing title...", {containerId: 'B'});
     fetch(`/api/threads`, {
       method: 'PUT',
       headers: {
@@ -115,6 +128,11 @@ export default function ModalComponent(props){
         setSelectedThread(updatedThread);
         setIsEditingTitle(false);
         setEditedTitle('');
+        toast.success("Edited title successfully!", {containerId: 'B'});
+      })
+      .catch((error) => {
+        console.error('Error editing title', error);
+        toast.error("Error editing title. Please try again later.", {containerId: 'B'});
       });
   };
 
@@ -128,7 +146,7 @@ export default function ModalComponent(props){
     if (editedCommentText.trim() === '') {
       return;
     }
-
+    toast.info("Saving comment...", {containerId: 'B'})
     const editedComment = {
       id: editedCommentId,
       text: editedCommentText,
@@ -154,9 +172,11 @@ export default function ModalComponent(props){
         setEditedCommentId(null);
         setEditedCommentText('');
         setIsEditingComment(false);
+        toast.success("Comment saved successfully!", {containerId: 'B'})
       })
       .catch((error) => {
         console.log('Error updating comment:', error);
+        toast.error("Error updating comment. Please try again later.", {containerId: 'B'})
       });
   };
 
@@ -167,6 +187,7 @@ export default function ModalComponent(props){
   };
 
   const handleDeleteComment = (comment) => {
+    toast.info('Deleting Comment...', {containerId: 'B'});
     fetch(`/api/comments/${comment.id}`, {
       method: 'DELETE',
     })
@@ -176,10 +197,12 @@ export default function ModalComponent(props){
         updatedThread.comments = updatedComments;
         setSelectedThread(updatedThread);
         props.updateSelectedThread(updatedThread);
+        toast.success('Comment Deleted!', {containerId: 'B'});
         
       })
       .catch((error) => {
         console.log('Error deleting comment:', error);
+        toast.error('There was a issue trying to delete this comment, please try again later.', {containerId: 'B'});
       });
   };
 
@@ -225,8 +248,22 @@ export default function ModalComponent(props){
             },
           }}
         >
+
           {props.selectedThread && (
             <div className="modal-content">
+                <ToastContainer 
+                  enableMultiContainer containerId={'B'}
+                  position="top-center"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss={false}
+                  draggable
+                  pauseOnHover
+                  theme="light"/>
+
               <div className="modal-header">
                 {isEditingTitle ? (
                   <>
@@ -306,13 +343,17 @@ export default function ModalComponent(props){
                               <>
                                 <button
                                   className="text-gray-600 rounded px-1 py-1 ml-2 hover:underline"
-                                  onClick={() => handleEditComment(comment)}
+                                  onClick={() =>                                  
+                                    handleEditComment(comment)
+                                  }
                                 >
                                   Edit
                                 </button>
                                 <button
                                   className="text-gray-600 rounded px-1 py-1 hover:underline"
-                                  onClick={() => handleDeleteComment(comment)}
+                                  onClick={() => {
+                                    handleDeleteComment(comment)
+                                  }}
                                 >
                                   Delete
                                 </button>

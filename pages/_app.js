@@ -5,7 +5,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import { SessionProvider } from 'next-auth/react';
 import Navbar from '../components/Navbar'
-
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 // Set the app element
 Modal.setAppElement('#__next');

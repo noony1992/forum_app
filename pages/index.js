@@ -4,6 +4,8 @@ import { useSession } from 'next-auth/react';
 import Router from 'next/router';
 import Link from 'next/link';
 import ModalComponent from '/components/ModalComponent';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const session = useSession();
@@ -29,6 +31,7 @@ export default function Home() {
   };
 
   const createThread = () => {
+    toast.info("Creating thread...", {containerId: 'A'})
     fetch('/api/threads', {
       method: 'POST',
       headers: {
@@ -48,7 +51,11 @@ export default function Home() {
         };
         setThreads((prevThreads) => [...prevThreads, newThread]);
         setNewThreadTitle('');
+        toast.success("Thread created!", {containerId: 'A'})
         openModal(newThread)
+      }).catch((error) => {
+        console.log('Error deleting thread:', error);
+        toast.error("There was a issue trying to create this thread, please try again later.", {containerId: 'A'});
       });
   };
 
@@ -87,6 +94,19 @@ export default function Home() {
   return (
     <div className="">
       <div>
+          <ToastContainer 
+              enableMultiContainer containerId={'A'}
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss={false}
+              draggable
+              pauseOnHover
+              theme="light"/>
+        
         {/* Thread list */}
         
           <ul className="container max-w-5xl mx-auto px-4 py-8 divide-y divide-gray-200">
@@ -106,8 +126,8 @@ export default function Home() {
             </button>
             </div>
             <h2 className="text-2xl font-bold mb-2">Threads</h2>
-            {isLoading ? ( // Render loading icon while isLoading is true
-          <div>Loading...</div>
+          {isLoading ? ( // Render loading icon while isLoading is true
+            <div class="text-center pt-2">Loading...</div>
             ) : (
               <>
             {threads.map((thread) => (        
