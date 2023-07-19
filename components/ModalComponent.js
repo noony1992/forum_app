@@ -441,8 +441,16 @@ export default function ModalComponent(props){
                         </div>
                         <div class="commentReply ml-3 ">                       
                           {comment.commentReplies?.map((commentReplies, index) => (                
-                             <div key={commentReplies.id} className="comment border-b border-l pl-3">
+                             <div key={commentReplies.id} className="comment border-b border-l pl-3 block">
                                 <span>{commentReplies.text}</span>
+                                <div className="">
+                                  <Link class="inline-flex hover:underline" href={`/profile/${commentReplies.user.username }`}>
+                                    <span className="comment-author font-normal text-xs py-0.5">by</span>
+                                    <img className="w-4 h-4 rounded-full ml-1 mt-0.5 mr-1 " src={`/images/${commentReplies.user.picture}`} alt="user photo" />
+                                    <span className="comment-author font-normal text-xs py-0.5">{commentReplies.user.username}</span>       
+                                  </Link>
+                                    <span className="font-normal text-xs py-0.5 text-gray-500 ml-1">{timeSince(commentReplies.createdAt)} ago</span>
+                                </div>
                              </div>
                           ))}
                         </div>
