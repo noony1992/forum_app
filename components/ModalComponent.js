@@ -13,6 +13,8 @@ export default function ModalComponent(props){
   const [newCommentText, setNewCommentText] = useState('');
   const [selectedThread, setSelectedThread] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(props.isModalOpen);
+  const [replyingToCommentId, setReplyingToCommentId] = useState(null);
+  const [replyingToCommentText, setReplyingToCommentText] = useState(null);
   
   const [threads, setThreads] = useState([]);
    
@@ -75,6 +77,45 @@ export default function ModalComponent(props){
           console.error('Error posting comment:', error);
           toast.error("Error posting comment. Please try again later.", {containerId: 'B'});
         });
+    } else if (replyingToCommentId) {
+      // Code for replying to a comment
+      const newReply = {
+        author: props.session.data.user[0].id,
+        timestamp: Date.now(),
+        text: replyingToCommentText,
+        threadId: selectedThread.id,
+        parentId: replyingToCommentId, // Add parentId to specify the parent comment ID
+      };
+      toast.info("Posting Comment...", { containerId: 'B' });
+      fetch(`/api/comments/replies`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newReply),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const updatedThread = { ...selectedThread };
+          const updatedComments = updatedThread.comments.map((comment) =>
+            comment.id === data.parentId
+              ? { ...comment, commentReplies: [...comment.commentReplies, data] }
+              : comment
+          );
+          updatedThread.comments = updatedComments;
+          console.log(updatedThread)
+          setSelectedThread(updatedThread);
+          props.updateSelectedThread(updatedThread);
+          setReplyingToCommentText('');
+          setReplyingToCommentId(null); // Reset the replyingToCommentId
+          toast.success("Reply Posted!", { containerId: 'B' });
+        })
+        .catch((error) => {
+          console.error('Error posting comment:', error);
+          toast.error("Error posting comment. Please try again later.", {
+            containerId: 'B',
+          });
+        });
     } else {
       const newComment = {
         author: props.session.data.user[0].id,
@@ -95,6 +136,7 @@ export default function ModalComponent(props){
           const updatedThread = { ...selectedThread };
           updatedThread.comments.push(data);
           setSelectedThread(updatedThread);
+          props.updateSelectedThread(updatedThread);
           setNewCommentText('');
           toast.success("Comment Posted!", {containerId: 'B'});
         })
@@ -206,6 +248,10 @@ export default function ModalComponent(props){
       });
   };
 
+  const handleReplyComment = (comment) => {
+    setReplyingToCommentId(comment.id);
+  };
+
   useEffect(() => {
     setIsModalOpen(props.isModalOpen);
     setSelectedThread(props.selectedThread);
@@ -270,6 +316,7 @@ export default function ModalComponent(props){
                   
                     <input
                       type="text"
+                      placeholder="Enter new title"
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
                     />
@@ -339,10 +386,41 @@ export default function ModalComponent(props){
                           </Link>
                           <span className="comment-timestamp">{timeSince(comment.createdAt)} ago</span>
                           <div>
+                          {replyingToCommentId === comment.id && (
+                                <div>
+                                  <textarea
+                                    type="text"
+                                    placeholder="Enter your reply"
+                                    className="border border-gray-300 rounded px-4 py-2 w-full mb-2"
+                                    value={replyingToCommentText}
+                                    onChange={(e) => setReplyingToCommentText(e.target.value)}
+                                  />
+                                  <button
+                                    className="bg-blue-500 text-white rounded px-4 py-2 float-right"
+                                    onClick={createComment}
+                                  >
+                                    Post Reply
+                                  </button>
+                                  <button
+                                  className="text-gray-600 rounded px-1 py-1 ml-2 hover:underline"
+                                  onClick={() =>  setReplyingToCommentId(null)}
+                                >
+                                  Cancel
+                                </button>
+                                </div>
+                              )}
+                              {!replyingToCommentId && (
+                                <button
+                                  className="text-gray-600 rounded px-1 py-1 ml-2 hover:underline"
+                                  onClick={() => handleReplyComment(comment)}
+                                >
+                                  Reply
+                                </button>
+                              )}
                             {comment.author === props.session.data.user[0].id && (
                               <>
                                 <button
-                                  className="text-gray-600 rounded px-1 py-1 ml-2 hover:underline"
+                                  className="text-gray-600 rounded px-1 py-1 ml-1 hover:underline"
                                   onClick={() =>                                  
                                     handleEditComment(comment)
                                   }
@@ -360,6 +438,13 @@ export default function ModalComponent(props){
                               </>
                             )}
                           </div>
+                        </div>
+                        <div class="commentReply ml-3 ">                       
+                          {comment.commentReplies?.map((commentReplies, index) => (                
+                             <div key={commentReplies.id} className="comment border-b border-l pl-3">
+                                <span>{commentReplies.text}</span>
+                             </div>
+                          ))}
                         </div>
                       </div>
                     )}

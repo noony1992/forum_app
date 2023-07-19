@@ -13,8 +13,9 @@ model comments {
   text      String
   createdAt String    
   author    Int      
-  thread    thread   @relation(fields: [threadid], references: [id]) 
+  thread    thread   @relation(fields: [threadid], references: [id], onDelete: Cascade) 
   user      user     @relation(fields: [author], references: [id])
+  commentReplies commentReplies[] 
 }
 
 model thread {
@@ -36,10 +37,21 @@ model user {
   threads  thread[]
   comments comments[]
   profile  profile?
+  commentReplies commentReplies[]
 }
 
 model profile{
   id     Int   @id @unique @default(autoincrement())
   userid Int   @unique
   user   user  @relation(fields: [userid], references: [id])
+}
+
+model commentReplies{
+  id        Int @id @unique @default(autoincrement())
+  commentId Int  
+  text      String
+  createdAt String    
+  author    Int 
+  comments  comments @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      user     @relation(fields: [author], references: [id])
 }
