@@ -12,7 +12,7 @@ export default function ModalComponent(props){
   const [editedCommentText, setEditedCommentText] = useState('');
   const [newCommentText, setNewCommentText] = useState('');
   const [selectedThread, setSelectedThread] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(props.isModalOpen);
+  // const [isModalOpen, setIsModalOpen] = useState(props.isModalOpen);
   const [replyingToCommentId, setReplyingToCommentId] = useState(null);
   const [replyingToCommentText, setReplyingToCommentText] = useState(null);
   
@@ -78,50 +78,51 @@ export default function ModalComponent(props){
           toast.error("Error posting comment. Please try again later.", {containerId: 'B'});
         });
     } else if (replyingToCommentId) {
-      // Code for replying to a comment
-      const newReply = {
-        author: props.session.data.user[0].id,
-        timestamp: Date.now(),
-        text: replyingToCommentText,
-        threadId: selectedThread.id,
-        parentId: replyingToCommentId, // Add parentId to specify the parent comment ID
-      };
-      toast.info("Posting Comment...", { containerId: 'B' });
-      fetch(`/api/comments/replies`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newReply),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const updatedThread = { ...selectedThread };
-          const updatedComments = updatedThread.comments.map((comment) =>
-            comment.id === data.parentId
-              ? { ...comment, commentReplies: [...comment.commentReplies, data] }
-              : comment
-          );
-          updatedThread.comments = updatedComments;
-          console.log(updatedThread)
-          setSelectedThread(updatedThread);
-          props.updateSelectedThread(updatedThread);
-          setReplyingToCommentText('');
-          setReplyingToCommentId(null); // Reset the replyingToCommentId
-          toast.success("Reply Posted!", { containerId: 'B' });
-        })
-        .catch((error) => {
-          console.error('Error posting comment:', error);
-          toast.error("Error posting comment. Please try again later.", {
-            containerId: 'B',
-          });
+       // Code for replying to a comment
+    const newReply = {
+      author: props.session.data.user[0].id,
+      timestamp: Date.now(),
+      text: replyingToCommentText,
+      threadId: selectedThread.id,
+      parentId: replyingToCommentId, // Add parentId to specify the parent comment ID
+    };
+    toast.info("Posting Comment Reply...", { containerId: 'B' });
+    fetch(`/api/comments/replies`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newReply),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const updatedThread = { ...selectedThread };
+        const commentReplies = updatedThread.comments.find(
+          (comment) => comment.id === replyingToCommentId
+        ).commentReplies;
+        updatedThread.comments = updatedThread.comments.map((comment) => {
+          if (comment.id === replyingToCommentId) {
+            return { ...comment, commentReplies: [...commentReplies, data] };
+          }
+          return comment;
         });
+        props.updateSelectedThread(updatedThread);
+        setReplyingToCommentId('') 
+        toast.success("Comment Posted!", {containerId: 'B'});
+      })
+      .catch((error) => {
+        console.error('Error posting comment:', error);
+        toast.error('Error posting comment. Please try again later.', {
+          containerId: 'B',
+        });
+      });
     } else {
       const newComment = {
         author: props.session.data.user[0].id,
         timestamp: Date.now(),
         text: newCommentText,
         threadId: selectedThread.id,
+        commentReplies: []
       };
       toast.info("Posting Comment...", {containerId: 'B'});
       fetch(`/api/comments`, {
@@ -136,6 +137,7 @@ export default function ModalComponent(props){
           const updatedThread = { ...selectedThread };
           updatedThread.comments.push(data);
           setSelectedThread(updatedThread);
+          console.log(updatedThread)
           props.updateSelectedThread(updatedThread);
           setNewCommentText('');
           toast.success("Comment Posted!", {containerId: 'B'});
@@ -224,8 +226,11 @@ export default function ModalComponent(props){
 
     
   const closeModal = () => {
-    setSelectedThread(null);
-    setIsModalOpen(false);
+    // setSelectedThread(null);
+    setEditedCommentId(null);
+    setEditedCommentText('');
+    // setIsModalOpen(false);
+    props.closeModal();
   };
 
   const handleDeleteComment = (comment) => {
@@ -253,13 +258,13 @@ export default function ModalComponent(props){
   };
 
   useEffect(() => {
-    setIsModalOpen(props.isModalOpen);
+    // setIsModalOpen(props.isModalOpen);
     setSelectedThread(props.selectedThread);
   }, [props.isModalOpen, props.selectedThread]);
   
     return (
         <Modal
-          isOpen={isModalOpen}
+          isOpen={props.isOpen}
           onRequestClose={closeModal}
           contentLabel="Thread Modal"
           className="modal"
@@ -440,15 +445,19 @@ export default function ModalComponent(props){
                           </div>
                         </div>
                         <div class="commentReply ml-3 ">                       
-                          {comment.commentReplies?.map((commentReplies, index) => (                
-                             <div key={commentReplies.id} className="comment border-b border-l pl-3 block">
+                        {Array.isArray(comment.commentReplies) &&
+                            comment.commentReplies.map((commentReplies, index) => (               
+                             <div key={commentReplies.id} className="border-b border-l pl-3 block pt-3 pb-1">
                                 <span>{commentReplies.text}</span>
                                 <div className="">
+                                {commentReplies.user && (
                                   <Link class="inline-flex hover:underline" href={`/profile/${commentReplies.user.username }`}>
+                                    {console.log(commentReplies)}
                                     <span className="comment-author font-normal text-xs py-0.5">by</span>
                                     <img className="w-4 h-4 rounded-full ml-1 mt-0.5 mr-1 " src={`/images/${commentReplies.user.picture}`} alt="user photo" />
                                     <span className="comment-author font-normal text-xs py-0.5">{commentReplies.user.username}</span>       
                                   </Link>
+                                )}
                                     <span className="font-normal text-xs py-0.5 text-gray-500 ml-1">{timeSince(commentReplies.createdAt)} ago</span>
                                 </div>
                              </div>

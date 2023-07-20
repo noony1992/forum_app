@@ -182,11 +182,12 @@ export default function Home() {
         
         {/* Modal */}
         <ModalComponent 
-          isModalOpen={isModalOpen} 
+          isOpen={isModalOpen}
           selectedThread={selectedThread} 
           session={session}
           threads={threads}
           updateSelectedThread={updateSelectedThread}
+          closeModal={() => setIsModalOpen(false)}
         />
       </div>
     </div>

@@ -21,23 +21,14 @@ export default async function handler(req, res) {
           text: req.body.text,
           author: req.body.author,
           createdAt: req.body.timestamp.toString(),
+        },
+        include: {
+          user: true
         }
       })
 
+      console.log(newCommentReplies)
       res.status(201).json(newCommentReplies);
     }
-  } else if (req.method === 'PUT'){
-//     const commentText = req.body.text;
-//     const CommentId = req.body.id;
-
-//     const updateComment = await prisma.comments.update({
-//       where: {
-//         id: CommentId,
-//       },
-//       data: {
-//         text: commentText,
-//       },
-//     })
-//     res.json(updateComment);
-  }
+  } 
 }

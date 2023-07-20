@@ -20,6 +20,7 @@ export default async function handler(req, res) {
                 comments: {
                   include: {
                     user: true,
+                    commentReplies: true,
                   }
                 }
               }
@@ -31,12 +32,14 @@ export default async function handler(req, res) {
                   comments: {
                     include: {
                       user: true,
+                      commentReplies: true,
                     }
                   },
                   user: true,
                 }
               },
               user: true,
+              commentReplies: true,
             }
           }
           },

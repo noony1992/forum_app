@@ -303,11 +303,12 @@ const openModal = (thread) => {
           </div>
 
           <ModalComponent 
-            isModalOpen={isModalOpen} 
+            isOpen={isModalOpen}
             selectedThread={selectedThread} 
             session={session}
             threads={profile[0].threads}
             updateSelectedThread={updateSelectedThread}
+            closeModal={() => setIsModalOpen(false)}
           />     
           </>
           

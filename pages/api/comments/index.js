@@ -27,6 +27,7 @@ export default async function handler(req, res) {
         },
         include: {
           user: true,
+          commentReplies: true,
         }
       })
 
