@@ -21,6 +21,7 @@ model comments {
 model thread {
   id        Int      @id @unique(map: "sqlite_autoindex_thread_1") @default(autoincrement())
   title     String
+  bodyText  String?
   createdAt String 
   author    Int
   comments  comments[]

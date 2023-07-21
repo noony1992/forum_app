@@ -137,7 +137,6 @@ export default function ModalComponent(props){
           const updatedThread = { ...selectedThread };
           updatedThread.comments.push(data);
           setSelectedThread(updatedThread);
-          console.log(updatedThread)
           props.updateSelectedThread(updatedThread);
           setNewCommentText('');
           toast.success("Comment Posted!", {containerId: 'B'});
@@ -267,7 +266,7 @@ export default function ModalComponent(props){
           isOpen={props.isOpen}
           onRequestClose={closeModal}
           contentLabel="Thread Modal"
-          className="modal"
+          className="modal animate__animated animate__slideInDown animate__faster"
           overlayClassName="overlay"
           style={{
             overlay: {
@@ -283,9 +282,9 @@ export default function ModalComponent(props){
               zIndex: 9999,
             },
             content: {
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
+              // position: 'absolute',
+              // top: '50%',
+              // left: '50%',
               transform: 'translate(-50%, -50%)',
               maxWidth: '90%',
               width: '85%', // Adjust the width as needed
@@ -299,9 +298,13 @@ export default function ModalComponent(props){
             },
           }}
         >
+          <button className="modal-close float-right text-slate-400 hover:underline" onClick={closeModal}>
+                  X <span class="text-sm pb-1">Close</span>
+          </button>
 
           {props.selectedThread && (
-            <div className="modal-content">
+            
+            <div className="modal-content ">
                 <ToastContainer 
                   enableMultiContainer containerId={'B'}
                   position="top-center"
@@ -314,6 +317,7 @@ export default function ModalComponent(props){
                   draggable
                   pauseOnHover
                   theme="light"/>
+                  
 
               <div className="modal-header">
                 {isEditingTitle ? (
@@ -351,11 +355,33 @@ export default function ModalComponent(props){
                     </>
                   </h3>
                 )}
-                <button className="modal-close" onClick={closeModal}>
-                  X
-                </button>
+                
               </div>
               <div className="modal-body">
+                <div className="container mb-5">
+                  {props.selectedThread.bodyText}
+                </div>
+                {!isEditingComment && (
+                  <>
+                  <div class="inline-block w-full">
+                    <textarea
+                        type="text"
+                        placeholder="Enter your comment"
+                        className="border border-gray-300 rounded px-4 py-2 w-full mb-0"
+                        value={newCommentText}
+                        onChange={(e) => setNewCommentText(e.target.value)}
+                      />
+                      <button
+                        className="bg-blue-500 text-white rounded px-3 py-1 text-sm float-right mt-0"
+                        onClick={createComment}
+                      >
+                        Post Comment
+                      </button>
+                      {console.log(props.selectedThread.comments)}
+                      <span class="text-gray-400 text-sm">{props.selectedThread.comments.length} Comments</span>
+                    </div>
+                  </>
+                )}
                 {props.selectedThread.comments.map((comment) => (
                   <div key={comment.id} className="comment border-b">
                     {isEditingComment && editedCommentId === comment.id ? (
@@ -452,7 +478,6 @@ export default function ModalComponent(props){
                                 <div className="">
                                 {commentReplies.user && (
                                   <Link class="inline-flex hover:underline" href={`/profile/${commentReplies.user.username }`}>
-                                    {console.log(commentReplies)}
                                     <span className="comment-author font-normal text-xs py-0.5">by</span>
                                     <img className="w-4 h-4 rounded-full ml-1 mt-0.5 mr-1 " src={`/images/${commentReplies.user.picture}`} alt="user photo" />
                                     <span className="comment-author font-normal text-xs py-0.5">{commentReplies.user.username}</span>       
@@ -469,23 +494,7 @@ export default function ModalComponent(props){
                 ))}
               </div>
               <div className="modal-footer">
-                {!isEditingComment && (
-                  <>
-                    <textarea
-                      type="text"
-                      placeholder="Enter your comment"
-                      className="border border-gray-300 rounded px-4 py-2 w-full mb-2"
-                      value={newCommentText}
-                      onChange={(e) => setNewCommentText(e.target.value)}
-                    />
-                    <button
-                      className="bg-blue-500 text-white rounded px-4 py-2 float-right "
-                      onClick={createComment}
-                    >
-                      Post Comment
-                    </button>
-                  </>
-                )}
+                
               </div>
             </div>
           )}

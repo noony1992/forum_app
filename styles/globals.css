@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 .modal-header {
-    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
@@ -15,6 +14,9 @@
     background: none;
     font-size: 1.2rem;
     cursor: pointer;
+    position: relative;
+    top: -27px;
+    right: -19px;
   }
 
   .modal-body {
@@ -80,3 +82,4 @@
   font-size: 15px;
   font-weight: 400
 }
+

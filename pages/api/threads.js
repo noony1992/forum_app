@@ -8,10 +8,12 @@ export default async function handler(req, res) {
     const threadTitle = req.body.title;
     const threadAuthor = req.body.author;
     const createdAt = req.body.createdAt.toString();
+    const threadBodyText = req.body.bodyText;
 
     const newThreadId = await prisma.thread.create({
       data: {
         title: threadTitle,
+        bodyText: threadBodyText,
         author: threadAuthor,
         createdAt: createdAt,
       },

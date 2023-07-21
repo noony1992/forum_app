@@ -7,6 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import Navbar from '../components/Navbar'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import 'flowbite';
 
 // Set the app element
 Modal.setAppElement('#__next');
