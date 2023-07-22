@@ -57,3 +57,8 @@ model commentReplies{
   comments  comments @relation(fields: [commentId], references: [id], onDelete: Cascade)
   user      user     @relation(fields: [author], references: [id])
 }
+
+model threadCategories{
+  id       Int      @id @unique @default(autoincrement())
+  category String   @unique
+}

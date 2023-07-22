@@ -20,7 +20,7 @@ export default function Home() {
   const [isTitleFocused, setIsTitleFocused] = useState(false);
   const [threadCategory, setThreadCategory] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const categories = ['News', 'Technology', 'Sports', 'Finance'];
+  const [threadCategories, setThreadCategories] = useState([]);
   
   useEffect(() => {
     fetch('/api/threads')
@@ -31,11 +31,25 @@ export default function Home() {
       });
   }, [selectedThread]);
 
+  useEffect(() => {
+    fetch('/api/settings/categories')
+      .then((response) => response.json())
+      .then((data) => {
+        setThreadCategories(data)
+      });
+  }, []);
+
+
   const updateSelectedThread = (updatedThread) => {
     setSelectedThread(updatedThread);
   };
 
   const createThread = () => {
+    if(!threadCategory){
+      toast.error("Thread Category not selected!", {containerId: 'A'})
+      return
+    }
+
     toast.info("Creating thread...", {containerId: 'A'})
     fetch('/api/threads', {
       method: 'POST',
@@ -59,6 +73,7 @@ export default function Home() {
         setThreads((prevThreads) => [...prevThreads, newThread]);
         setNewThreadTitle('');
         setNewThreadBodyText('');
+        setThreadCategory('')
         toast.success("Thread created!", {containerId: 'A'})
         openModal(newThread)
       }).catch((error) => {
@@ -159,26 +174,27 @@ export default function Home() {
                     <input
                       type="text"
                       placeholder="Search categories..."
-                      className="px-3 py-1 w-full mb-0 text-white rounded-3 bg-transparent"
+                      className="px-4 py-2 w-full mb-0 text-white rounded-3 bg-transparent border-none"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
+                    {console.log(threadCategories)}
                     <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-                      {categories
+                      {threadCategories
                         .filter((category) =>
-                          category.toLowerCase().includes(searchQuery.toLowerCase())
+                          category.category.toLowerCase().includes(searchQuery.toLowerCase())
                         )
                         .map((category) => (
-                          <li key={category}>
+                          <li key={category.id}>
                             <a
                               href="#"
                               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                               onClick={() => {
-                                setThreadCategory(category);
+                                setThreadCategory(category.category);
                                 setSearchQuery(''); // Clear search query after selecting a category
                               }}
                             >
-                              {category}
+                              {category.category}
                             </a>
                           </li>
                         ))}

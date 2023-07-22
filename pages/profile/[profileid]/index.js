@@ -9,6 +9,7 @@ import { Tabs } from 'flowbite-react';
 import { HiAdjustments, HiClipboardList, HiUserCircle } from 'react-icons/hi';
 import { MdDashboard } from 'react-icons/md';
 import ModalComponent from '/components/ModalComponent';
+import Router from 'next/router';
 
 const Profile = ({ dirs }) => {
   const router = useRouter()

@@ -285,7 +285,6 @@ export default function ModalComponent(props){
               // position: 'absolute',
               // top: '50%',
               // left: '50%',
-              transform: 'translate(-50%, -50%)',
               maxWidth: '90%',
               width: '85%', // Adjust the width as needed
               maxHeight: '90%',
