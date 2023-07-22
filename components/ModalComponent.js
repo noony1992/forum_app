@@ -377,7 +377,6 @@ export default function ModalComponent(props){
                       >
                         Post Comment
                       </button>
-                      {console.log(props.selectedThread.comments)}
                       <span class="text-gray-400 text-sm">{props.selectedThread.comments.length} Comments</span>
                     </div>
                   </>

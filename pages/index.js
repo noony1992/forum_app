@@ -18,6 +18,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [newThreadBodyText, setNewThreadBodyText] = useState('');
   const [isTitleFocused, setIsTitleFocused] = useState(false);
+  const [threadCategory, setThreadCategory] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const categories = ['News', 'Technology', 'Sports', 'Finance'];
   
   useEffect(() => {
     fetch('/api/threads')
@@ -39,7 +42,7 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ title: newThreadTitle, bodyText: newThreadBodyText, author: session.data.user[0].id, createdAt: Date.now() }),
+      body: JSON.stringify({ title: newThreadTitle, bodyText: newThreadBodyText, category: threadCategory, author: session.data.user[0].id, createdAt: Date.now() }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -47,6 +50,7 @@ export default function Home() {
           id: data.newThreadId.id,
           title: data.newThreadId.title,
           bodyText: data.newThreadId.bodyText,
+          category: data.newThreadId.category,
           createdAt: data.newThreadId.createdAt,
           username: data.newThreadId.user.username,
           picture: data.newThreadId.user.picture,
@@ -95,6 +99,21 @@ export default function Home() {
     return Math.floor(seconds) + ' seconds';
   }
 
+  function getCategoryClass(category) {
+    switch (category.toLowerCase()) {
+      case 'news':
+        return 'bg-purple-100 text-purple-800';
+      case 'technology':
+        return 'bg-red-100 text-red-800';
+      case 'sports':
+        return 'bg-green-100 text-green-800';
+      case 'finance':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-blue-100 text-blue-800';
+    }
+  }
+
   return (
     <div className="">
       <div>
@@ -125,24 +144,45 @@ export default function Home() {
                   onBlur={() => setIsTitleFocused(false)}
                 />
                   <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-600 sr-only dark:text-white">Your Email</label>
-                        <button id="dropdown-button" data-dropdown-toggle="dropdown" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-200 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 " type="button">Choose Category <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg></button>
-                  <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-                      <li>
-                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">News</a>
-                      </li>
-                      <li>
-                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Technology</a>
-                      </li>
-                      <li>
-                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sports</a>
-                      </li>
-                      <li>
-                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Finance</a>
-                      </li>
-                      </ul>
+                  <button
+                    id="dropdown-button"
+                    data-dropdown-toggle="dropdown"
+                    className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-200 border border-gray-300 rounded-r-lg hover:bg-gray-300"
+                    type="button"
+                  >
+                    {threadCategory || 'Choose Category'}
+                    <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                    </svg>
+                  </button>
+                  <div id="dropdown" className="z-10 hidden bg-white divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    <input
+                      type="text"
+                      placeholder="Search categories..."
+                      className="px-3 py-1 w-full mb-0 text-white rounded-3 bg-transparent"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+                      {categories
+                        .filter((category) =>
+                          category.toLowerCase().includes(searchQuery.toLowerCase())
+                        )
+                        .map((category) => (
+                          <li key={category}>
+                            <a
+                              href="#"
+                              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                              onClick={() => {
+                                setThreadCategory(category);
+                                setSearchQuery(''); // Clear search query after selecting a category
+                              }}
+                            >
+                              {category}
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
                   </div>
                 <button
                   className="whitespace-nowrap focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-green-500 dark:hover:bg-green-700 dark:focus:ring-green-800 ml-2 float-right z-40"
@@ -183,7 +223,7 @@ export default function Home() {
                   >
                     <div className="flex-grow">
                       <h3 className="text-xl font-semibold">
-                        {thread.title}{' '}
+                        {thread.title}{' '}<span class={` ${getCategoryClass(thread.category)} text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full`}>{thread.category}</span>
                         <h5 className="text-sm italic font-normal text-gray-500 float-right py-1">
                           {timeSince(thread.createdAt)} ago
                         </h5>
