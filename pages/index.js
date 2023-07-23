@@ -178,7 +178,6 @@ export default function Home() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    {console.log(threadCategories)}
                     <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
                       {threadCategories
                         .filter((category) =>

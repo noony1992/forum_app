@@ -13,8 +13,11 @@ function Navbar(){
         Router.push('/login');
       }
     }, [session]);
+    let profilePicture = ''
 
-    const profilePicture = '/images/' + session?.data?.user[0]?.picture;
+    if(session?.data?.user[0]?.picture){
+      profilePicture = '/images/' + session?.data?.user[0]?.picture;
+    }
     return (
         <nav class="bg-white border-gray-200 dark:bg-gray-900">
           <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>

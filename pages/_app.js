@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'flowbite';
+import { Analytics } from '@vercel/analytics/react';
 
 // Set the app element
 Modal.setAppElement('#__next');
@@ -19,6 +20,7 @@ const MyApp = ({ Component, pageProps }) => {
       <SessionProvider session={pageProps.session}>
         <>
           <Component {...pageProps} />
+          <Analytics />
         </>
       </SessionProvider>
     )
@@ -29,6 +31,7 @@ const MyApp = ({ Component, pageProps }) => {
       <>
         <Navbar />
         <Component {...pageProps} />
+        <Analytics />
       </>
     </SessionProvider>
   );
