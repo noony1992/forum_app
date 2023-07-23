@@ -319,40 +319,46 @@ export default function ModalComponent(props){
                   
 
               <div className="modal-header">
-                {isEditingTitle ? (
-                  <>
-                  
-                    <input
-                      type="text"
-                      placeholder="Enter new title"
-                      value={editedTitle}
-                      onChange={(e) => setEditedTitle(e.target.value)}
-                    />
-                    <button
-                      className="text-sm font-normal text-gray-600 rounded px-2 py-1 hover:underline"
-                      onClick={editThreadTitle}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className="text-sm font-normal text-gray-600 rounded px-2 py-1 hover:underline"
-                      onClick={() => setIsEditingTitle(false)}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <h3 className="text-2xl font-bold">
-                    {props.selectedThread.title}
-                    <>
+                
+                  {isEditingTitle ? (
+                    props.selectedThread.author === props.session.data.user[0].id && (  
+                      <>                
+                      <input
+                        type="text"
+                        placeholder="Enter new title"
+                        value={editedTitle}
+                        onChange={(e) => setEditedTitle(e.target.value)}
+                      />
                       <button
                         className="text-sm font-normal text-gray-600 rounded px-2 py-1 hover:underline"
-                        onClick={() => setIsEditingTitle(true)}
+                        onClick={editThreadTitle}
                       >
-                        Edit Title
+                        Save
                       </button>
-                    </>
-                  </h3>
+                      <button
+                        className="text-sm font-normal text-gray-600 rounded px-2 py-1 hover:underline"
+                        onClick={() => setIsEditingTitle(false)}
+                      >
+                        Cancel
+                      </button>
+                      </>
+                    )
+                   
+                  ) : (
+                    <h3 className="text-2xl font-bold">
+                      {props.selectedThread.title}
+                      <>
+                      {props.selectedThread.author === props.session.data.user[0].id && (  
+                        <button
+                          className="text-sm font-normal text-gray-600 rounded px-2 py-1 hover:underline"
+                          onClick={() => setIsEditingTitle(true)}
+                        >
+                          Edit Title
+                        </button>
+                      )}
+                      </>
+                    </h3>
+                  
                 )}
                 
               </div>

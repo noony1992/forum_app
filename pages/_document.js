@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-import 'flowbite';
+
 
 export default function Document() {
   return (

@@ -20,7 +20,7 @@ function Navbar(){
     }
     return (
         <nav class="bg-white border-gray-200 dark:bg-gray-900">
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
+
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" class="flex items-center">
             

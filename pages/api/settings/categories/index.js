@@ -14,7 +14,6 @@ export default async function handler(req, res) {
                 category: category,
             },
         })
-        console.log(newCategory)
         res.status(201).json(newCategory);
         
     } else if (req.method === 'PUT'){
