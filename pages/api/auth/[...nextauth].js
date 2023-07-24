@@ -1,4 +1,5 @@
 import NextAuth from "next-auth/next";
+import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from '@prisma/client'
 import fs from 'fs';
@@ -6,7 +7,7 @@ import path from 'path';
 
 const prisma = new PrismaClient()
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({     
       async authorize(credentials) {        
@@ -46,5 +47,7 @@ export default NextAuth({
         return session;
       },
     },
-});
+};
+
+export default NextAuth(authOptions)
 

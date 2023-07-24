@@ -19,6 +19,7 @@ export default function Home() {
     const [threadCategorySearchQuery, setThreadCategorySearchQuery] = useState('');
     const [newThreadCategory, setNewThreadCategory] = useState('');
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [checkedCategories, setCheckedCategories] = useState([]);
 
     const session = useSession();
 
@@ -46,6 +47,55 @@ export default function Home() {
           }).catch((error) => {
             console.log('Error adding category:', error);
             toast.error("There was a issue trying to create this category, please try again later.", {containerId: 'A'});
+          });
+      };
+
+      const handleCategoryCheckbox = (categoryId) => {
+        setCheckedCategories((prevChecked) =>
+          prevChecked.includes(categoryId)
+            ? prevChecked.filter((id) => id !== categoryId)
+            : [...prevChecked, categoryId]
+        );
+        console.log(checkedCategories)
+      };
+
+      const handleDeleteCategories = () => {
+        if (checkedCategories.length === 0) {
+          // If there are no categories checked, show a message or return early
+          toast.warning('Please select categories to delete.', { containerId: 'B' });
+          return;
+        }
+      
+        const promises = [];
+      
+        // Loop through the checkedCategories array and delete each category one by one
+        checkedCategories.forEach((categoryId) => {
+          promises.push(
+            fetch(`/api/settings/categories/${categoryId}`, {
+              method: 'DELETE',
+            })
+          );
+        });
+      
+        // Wait for all the delete requests to complete using Promise.all
+        Promise.all(promises)
+          .then(() => {
+            // Remove the deleted categories from the threadCategories state
+            const updatedCategories = threadCategories.filter(
+              (category) => !checkedCategories.includes(category.id)
+            );
+            setThreadCategories(updatedCategories);
+      
+            // Reset the checkedCategories state after deletion
+            setCheckedCategories([]);
+      
+            toast.success('Categories Deleted!', { containerId: 'B' });
+          })
+          .catch((error) => {
+            console.log('Error deleting categories:', error);
+            toast.error('There was an issue trying to delete the categories, please try again later.', {
+              containerId: 'B',
+            });
           });
       };
 
@@ -120,8 +170,24 @@ export default function Home() {
                                 .map((category) => (
                                     <li key={category.id}>
                                         <div class="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <input id={`checkbox-item-${category.id}`} type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                        <label for={`checkbox-item-${category.id}`} class="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{category.category}</label>
+                                        <input 
+                                          id={`checkbox-item-${category.id}`} 
+                                          type="checkbox" 
+                                          value="" 
+                                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" 
+                                          checked={checkedCategories.includes(category.id)}
+                                          onChange={() => handleCategoryCheckbox(category.id)}
+                                        />
+                                        <label 
+                                          for={`checkbox-item-${category.id}`} 
+                                          class={`w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded ${
+                                            checkedCategories.includes(category.id)
+                                              ? "bg-green-100 dark:bg-green-600"
+                                              : ""
+                                          } dark:text-gray-300`}
+                                        >
+                                            {category.category}
+                                        </label>
                                         </div>
                                     </li>
                             ))}                   
@@ -149,12 +215,13 @@ export default function Home() {
                                         Add
                                 </button>
                             </div>
-                        <a href="#" class="flex items-center p-3 text-sm font-medium text-red-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-red-500 hover:underline">
-                            <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                                <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z"/>
-                            </svg>
-                            Delete category
-                        </a>
+                            <button
+                              type="button"
+                              onClick={handleDeleteCategories}
+                              class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-sm rounded-lg text-sm px-5 py-2 mt-3 w-11/12 center m-2"
+                            >
+                              Delete Selected Categories
+                            </button>
                     </div>
                     )}
                     </>
