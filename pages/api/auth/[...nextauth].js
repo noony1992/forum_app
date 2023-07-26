@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from '@prisma/client'
 import fs from 'fs';
 import path from 'path';
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient()
 
@@ -12,16 +13,16 @@ export const authOptions = {
     CredentialsProvider({     
       async authorize(credentials) {        
         const { username, password } = credentials;
-         
+
         const user = await prisma.user.findMany({
           where: {
             username: username,
-            password: password,
           }
-        })
+        })  
+        const check = await bcrypt.compare(password, user[0].password)
         delete user[0].password;
 
-        if (user) {
+        if (check) {
           // Return the user object if authentication is successful
           return user;
         } else {

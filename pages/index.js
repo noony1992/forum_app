@@ -46,7 +46,7 @@ export default function Home() {
 
   const createThread = () => {
     if(!threadCategory){
-      toast.error("Thread Category not selected!", {containerId: 'A'})
+      toast.warning("Thread Category not selected!", {containerId: 'A'})
       return
     }
 
@@ -253,7 +253,14 @@ export default function Home() {
                         <h5 className="text-sm italic text-gray-500 inline-flex">
                           by
                           <img className="w-5 h-5 rounded-full ml-1 mr-1" src={`images/${thread.picture ? thread.picture : thread.user.picture}`} alt="user photo" />
-                          {thread.username ? thread.username : thread.user.username}
+                          <h3 class={`${(thread.user.admin === true) ? (
+                              'text-red-600'
+                            ) : ('text-gray-500')
+                          }`}>
+                            {thread.username ? thread.username : thread.user.username}
+                          </h3>
+                            
+
                         </h5>
                       </button>
                       <h5 className="text-sm text-gray-500">{thread.comments ? thread.comments.length : 0} Comments</h5>

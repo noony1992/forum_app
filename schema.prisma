@@ -14,7 +14,7 @@ model comments {
   createdAt String    
   author    Int      
   thread    thread   @relation(fields: [threadid], references: [id], onDelete: Cascade) 
-  user      user     @relation(fields: [author], references: [id])
+  user      user     @relation(fields: [author], references: [id], onDelete: Cascade)
   commentReplies commentReplies[] 
 }
 
@@ -26,7 +26,7 @@ model thread {
   createdAt String 
   author    Int
   comments  comments[]
-  user      user     @relation(fields: [author], references: [id])
+  user      user     @relation(fields: [author], references: [id], onDelete: Cascade)
 }
 
 model user {
@@ -55,7 +55,7 @@ model commentReplies{
   createdAt String    
   author    Int 
   comments  comments @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user      user     @relation(fields: [author], references: [id])
+  user      user     @relation(fields: [author], references: [id], onDelete: Cascade)
 }
 
 model threadCategories{

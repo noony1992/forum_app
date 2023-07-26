@@ -62,11 +62,11 @@ export default function SignIn() {
                   toast.success("Login Successfull");
                   window.location.replace('/') 
                 } else {
-                    toast("Credentials do not match!", { type: "error" });
+                    toast("Login detials incorrect!", { type: "error" });
                 }})
             }>         
           Login</button>
-
+            <h1><a href="/account/create" class="hover:underline text-blue-400" children>Dont have an account yet? Sign up here</a></h1>
       </div>
     </div>
   );

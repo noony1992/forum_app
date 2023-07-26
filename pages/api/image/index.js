@@ -2,8 +2,8 @@ import formidable from "formidable"
 import path from "path"
 import fs from "fs/promises"
 import { PrismaClient } from '@prisma/client'
-
-
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { getServerSession  } from "next-auth/next"
 
 export const config = {
   api: {
@@ -43,15 +43,22 @@ const handler = async (req, res) => {
 }
 
 async function dbupdate(fields, files) {
-  const prisma = new PrismaClient()
-  const newComment = await prisma.user.update({
-    where: {
-      id: parseInt(fields.userid[0]),
-    },
-    data: {
-      picture: files.myImage[0].newFilename,
-    },
-  })
+  const session = await getServerSession( req, res, authOptions)
+
+  if (session) {
+    const prisma = new PrismaClient()
+    const newComment = await prisma.user.update({
+      where: {
+        id: parseInt(fields.userid[0]),
+      },
+      data: {
+        picture: files.myImage[0].newFilename,
+      },
+    })
+  } else {
+    // Not Signed in
+    res.status(401)
+  }
 }
 
 export default handler
