@@ -20,29 +20,14 @@ export default async function handler(req, res) {
               threads: {
                 include: {
                   user: true,
-                  comments: {
-                    include: {
-                      user: true,
-                      commentReplies: true,
-                    }
-                  }
-                }
+                  _count: {
+                    select: { comments: true},
+                  },
+                },
               },
             comments: {
               include: {
-                thread: {
-                  include: {
-                    comments: {
-                      include: {
-                        user: true,
-                        commentReplies: true,
-                      }
-                    },
-                    user: true,
-                  }
-                },
-                user: true,
-                commentReplies: true,
+                thread: true,
               }
             }
             },

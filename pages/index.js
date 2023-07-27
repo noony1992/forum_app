@@ -68,7 +68,8 @@ export default function Home() {
           createdAt: data.newThreadId.createdAt,
           username: data.newThreadId.user.username,
           picture: data.newThreadId.user.picture,
-          comments: [],
+          user: {admin: data.newThreadId.user.admin},
+          _count: {comments: data.newThreadId._count.comments},
         };
         setThreads((prevThreads) => [...prevThreads, newThread]);
         setNewThreadTitle('');
@@ -259,11 +260,9 @@ export default function Home() {
                           }`}>
                             {thread.username ? thread.username : thread.user.username}
                           </h3>
-                            
-
                         </h5>
                       </button>
-                      <h5 className="text-sm text-gray-500">{thread.comments ? thread.comments.length : 0} Comments</h5>
+                      <h5 className="text-sm text-gray-500">{thread._count.comments} Comments</h5>
                     </div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -291,7 +290,7 @@ export default function Home() {
           isOpen={isModalOpen}
           selectedThread={selectedThread} 
           session={session}
-          threads={threads}
+          //threads={threads}
           updateSelectedThread={updateSelectedThread}
           closeModal={() => setIsModalOpen(false)}
         />

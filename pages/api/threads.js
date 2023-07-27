@@ -27,8 +27,12 @@ export default async function handler(req, res) {
               select: {
                 username: true,
                 picture: true,
+                admin: true,
               }
             },
+            _count: {
+              select: { comments: true},
+            }
           }
         })
           res.status(201).json({ newThreadId });
@@ -38,17 +42,7 @@ export default async function handler(req, res) {
       }
   } else if (req.method === 'GET') {
     const threads = await prisma.thread.findMany({ 
-      include: { 
-        comments: {
-          include: {
-            user: true,
-            commentReplies: {
-              include: {
-                user: true
-              }
-            }
-          }
-        },
+      include: {        
         user: {
           select: {
             username: true,
@@ -56,6 +50,9 @@ export default async function handler(req, res) {
             admin: true,
           }
         },
+        _count: {
+          select: { comments: true},
+        }
       },
     });  
       res.status(201).json(threads);

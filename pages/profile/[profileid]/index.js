@@ -134,7 +134,7 @@ const openModal = (thread) => {
                               {thread.user.username }
                             </h5>
                           </button>
-                          <h5 className="text-sm text-gray-500">{thread.comments ? thread.comments.length : 0} Comments</h5>
+                          <h5 className="text-sm text-gray-500">{thread._count.comments} Comments</h5>
                         </div>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -307,7 +307,7 @@ const openModal = (thread) => {
             isOpen={isModalOpen}
             selectedThread={selectedThread} 
             session={session}
-            threads={profile[0].threads}
+            //threads={profile[0].threads}
             updateSelectedThread={updateSelectedThread}
             closeModal={() => setIsModalOpen(false)}
           />     
