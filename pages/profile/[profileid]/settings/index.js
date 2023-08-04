@@ -1,18 +1,13 @@
-import { useRouter } from 'next/router'
 import  React from 'react'
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import axios from "axios";
-import fs from "fs/promises";
-import path from "path";
-import Link from "next/link";
 import { Tabs } from 'flowbite-react';
 import { HiAdjustments, HiClipboardList, HiUserCircle } from 'react-icons/hi';
 import { MdDashboard } from 'react-icons/md';
-import ModalComponent from '/components/ModalComponent';
-import Router from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Checkbox, Table, Sidebar } from 'flowbite-react';
+import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from 'react-icons/hi';
 
 export default function Home() {
     const [threadCategories, setThreadCategories] = useState([]);
@@ -113,10 +108,14 @@ export default function Home() {
               draggable
               pauseOnHover
               theme="light"/>
-        <Tabs.Group
+
+
+
+            <Tabs.Group
               aria-label="Tabs with underline"
               style="underline"
             >
+              
               <Tabs.Item
                 active
                 icon={HiUserCircle}
@@ -137,6 +136,81 @@ export default function Home() {
                     title="Admin Settings"
                   >
                     <>
+                    <div class="flex">
+                    <div class="w-1/4" >
+          <Sidebar aria-label="Sidebar with multi-level dropdown example">
+            <Sidebar.Items>
+            <Sidebar.ItemGroup>
+            <Sidebar.Item
+            href="#"
+            icon={HiChartPie}
+          >
+            <p>
+              Dashboard
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Collapse
+            icon={HiShoppingBag}
+            label="E-commerce"
+          >
+            <Sidebar.Item href="#">
+              Products
+            </Sidebar.Item>
+            <Sidebar.Item href="#">
+              Sales
+            </Sidebar.Item>
+            <Sidebar.Item href="#">
+              Refunds
+            </Sidebar.Item>
+            <Sidebar.Item href="#">
+              Shipping
+            </Sidebar.Item>
+          </Sidebar.Collapse>
+          <Sidebar.Item
+            href="#"
+            icon={HiInbox}
+          >
+            <p>
+              Inbox
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Item
+            href="#"
+            icon={HiUser}
+          >
+            <p>
+              Users
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Item
+            href="#"
+            icon={HiShoppingBag}
+          >
+            <p>
+              Products
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Item
+            href="#"
+            icon={HiArrowSmRight}
+          >
+            <p>
+              Sign In
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Item
+            href="#"
+            icon={HiTable}
+          >
+            <p>
+              Sign Up
+            </p>
+          </Sidebar.Item>
+        </Sidebar.ItemGroup>
+      </Sidebar.Items>
+    </Sidebar>
+    </div>
+                <div class="w-3/4">
                     <button id="dropdownSearchButton" onClick={() => setIsDropdownVisible((prev) => !prev)} data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 " type="button">Categories <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                     </svg></button>
@@ -222,12 +296,71 @@ export default function Home() {
                             >
                               Delete Selected Categories
                             </button>
+
                     </div>
                     )}
+                      <Table class="w-full relative" hoverable>
+                        <Table.Head>
+                          <Table.HeadCell className="p-4">
+                            <Checkbox />
+                          </Table.HeadCell>
+                          <Table.HeadCell>
+                            Product name
+                          </Table.HeadCell>
+                          <Table.HeadCell>
+                            Color
+                          </Table.HeadCell>
+                          <Table.HeadCell>
+                            Category
+                          </Table.HeadCell>
+                          <Table.HeadCell>
+                            Price
+                          </Table.HeadCell>
+                          <Table.HeadCell>
+                            <span className="sr-only">
+                              Edit
+                            </span>
+                          </Table.HeadCell>
+                        </Table.Head>
+                        <Table.Body className="divide-y">
+                          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <Table.Cell className="p-4">
+                              <Checkbox />
+                            </Table.Cell>
+                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                              Apple MacBook Pro 17"
+                            </Table.Cell>
+                            <Table.Cell>
+                              Sliver
+                            </Table.Cell>
+                            <Table.Cell>
+                              Laptop
+                            </Table.Cell>
+                            <Table.Cell>
+                              $2999
+                            </Table.Cell>
+                            <Table.Cell>
+                              <a
+                                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                                href="/tables"
+                              >
+                                <p>
+                                  Edit
+                                </p>
+                              </a>
+                            </Table.Cell>
+                          </Table.Row>
+                          
+                        </Table.Body>
+                      </Table>
+                      </div>   
+                      </div>
                     </>
                 </Tabs.Item>
-              ) : ''}              
+              ) : ''}      
+                   
             </Tabs.Group>    
+            
         </div>
     )
 }

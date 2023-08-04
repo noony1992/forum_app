@@ -148,12 +148,12 @@ export default function Home() {
         
         {/* Thread list */}
         
-          <ul className="container max-w-5xl mx-auto px-4 py-8 divide-y divide-gray-200">
+          <ul className="container max-w-5xl mx-auto px-4 py-8 divide-y divide-black">
             <div class="inline-flex w-full mb-2">
               <input
                   type="text"
                   placeholder="Enter thread title"
-                  className="border border-r-0 border-gray-300 rounded-l px-4 py-2 w-full z-40"
+                  className="border border-r-0 rounded-l px-4 py-2 w-full z-40 bg-[#0c111c]"
                   value={newThreadTitle}
                   onChange={(e) => setNewThreadTitle(e.target.value)}
                   onFocus={() => setIsTitleFocused(true)}
@@ -163,7 +163,7 @@ export default function Home() {
                   <button
                     id="dropdown-button"
                     data-dropdown-toggle="dropdown"
-                    className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-200 border border-gray-300 rounded-r-lg hover:bg-gray-300"
+                    className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-[#161f2d] border border-black rounded-r-lg hover:bg-gray-800"
                     type="button"
                   >
                     {threadCategory || 'Choose Category'}
@@ -171,7 +171,7 @@ export default function Home() {
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                     </svg>
                   </button>
-                  <div id="dropdown" className="z-10 hidden bg-white divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                  <div id="dropdown" className="z-10 hidden bg-white divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 border border-black rounded">
                     <input
                       type="text"
                       placeholder="Search categories..."
@@ -179,7 +179,7 @@ export default function Home() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+                    <ul className="py-2 text-sm text-gray-400 bg-gray-800 dark:text-gray-200" aria-labelledby="dropdown-button">
                       {threadCategories
                         .filter((category) =>
                           category.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -232,15 +232,15 @@ export default function Home() {
               <>
             {threads.map((thread) => (        
               thread && (         
-                <li key={thread.id} className="py-2">
+                <li key={thread.id} className="py-2 border-[#040810]">
                   <button
-                    className="flex items-center space-x-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none px-4 py-2 w-full"
+                    className="flex items-center space-x-2 text-left hover:bg-[#1d2839] focus:[#1d2839] focus:outline-none px-4 py-2 w-full"
                     onClick={() => openModal(thread)}
                   >
                     <div className="flex-grow">
-                      <h3 className="text-xl font-semibold">
+                      <h3 className="text-xl font-semibold color-[#c8cad0cc]">
                         {thread.title}{' '}<span class={` ${getCategoryClass(thread.category)} text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full`}>{thread.category}</span>
-                        <h5 className="text-sm italic font-normal text-gray-500 float-right py-1">
+                        <h5 className="text-sm italic font-normal float-right py-1">
                           {timeSince(thread.createdAt)} ago
                         </h5>
                       </h3>

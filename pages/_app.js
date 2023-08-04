@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'flowbite';
 import { Analytics } from '@vercel/analytics/react';
-
+import ReactDOM from 'react-dom';
 // Set the app element
 Modal.setAppElement('#__next');
 
@@ -21,6 +21,7 @@ const MyApp = ({ Component, pageProps }) => {
         <>
           <Component {...pageProps} />
           <Analytics />
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>       
         </>
       </SessionProvider>
     )
@@ -28,10 +29,11 @@ const MyApp = ({ Component, pageProps }) => {
 
   return (
     <SessionProvider session={pageProps.session}>
-      <>
+      <>          
         <Navbar />
         <Component {...pageProps} />
         <Analytics />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>       
       </>
     </SessionProvider>
   );

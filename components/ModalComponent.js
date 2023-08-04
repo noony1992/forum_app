@@ -299,9 +299,9 @@ export default function ModalComponent(props){
               width: '85%', // Adjust the width as needed
               maxHeight: '90%',
               height: '85%', // Adjust the height as needed
-              padding: '2rem',
+              padding: '0.8rem',
               borderRadius: '4px',
-              backgroundColor: 'white',
+              backgroundColor: 'rgb(29 40 56)',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               overflow: 'auto',
             },
@@ -365,18 +365,20 @@ export default function ModalComponent(props){
                     )
                    
                   ) : (
-                    <h3 className="text-2xl font-bold">
+                    <h3 className="text-2xl font-bold block">
                       {selectedThread.title}
+                      
                       <>
                       {selectedThread.author === props.session.data.user[0].id && (  
                         <button
-                          className="text-sm font-normal text-gray-600 rounded px-2 py-1 hover:underline"
+                          className="text-sm font-normal text-gray-600 rounded px-3 py-1 hover:underline"
                           onClick={() => setIsEditingTitle(true)}
                         >
                           Edit Title
                         </button>
                       )}
                       </>
+                      <h3 class="text-xs flex font-normal text-gray-500">by<img className="w-4 h-4 rounded-full ml-1 mr-1" src={`images/${selectedThread.user.picture}`} alt="user photo" /> {selectedThread.user.username}</h3>
                     </h3>
                   
                 )}
@@ -407,7 +409,7 @@ export default function ModalComponent(props){
                   </>
                 )}
                 {selectedThread.comments.map((comment) => (
-                  <div key={comment.id} className="comment border-b">
+                  <div key={comment.id} className="comment border-b border-black">
                     {isEditingComment && editedCommentId === comment.id ? (
                       <div>
                         <textarea
@@ -418,13 +420,13 @@ export default function ModalComponent(props){
                           onChange={(e) => setEditedCommentText(e.target.value)}
                         />
                         <button
-                          className="text-gray-600 rounded px-2 py-1 float-right mr-2 hover:underline"
+                          className="text-gray-400 rounded px-2 py-1 float-right mr-2 hover:underline"
                           onClick={handleSaveComment}
                         >
                           Save
                         </button>
                         <button
-                          className="text-gray-600 rounded px-2 py-1 float-right hover:underline"
+                          className="text-gray-400 rounded px-2 py-1 float-right hover:underline"
                           onClick={() => setIsEditingComment(false)}
                         >
                           Cancel
@@ -457,7 +459,7 @@ export default function ModalComponent(props){
                                     Post Reply
                                   </button>
                                   <button
-                                  className="text-gray-600 rounded px-1 py-1 ml-2 hover:underline"
+                                  className="text-gray-400 rounded px-1 py-1 ml-2 hover:underline"
                                   onClick={() =>  setReplyingToCommentId(null)}
                                 >
                                   Cancel
@@ -466,7 +468,7 @@ export default function ModalComponent(props){
                               )}
                               {!replyingToCommentId && (
                                 <button
-                                  className="text-gray-600 rounded px-1 py-1 ml-2 hover:underline"
+                                  className="text-gray-400 rounded px-1 py-1 ml-2 hover:underline"
                                   onClick={() => handleReplyComment(comment)}
                                 >
                                   Reply
@@ -475,7 +477,7 @@ export default function ModalComponent(props){
                             {comment.author === props.session.data.user[0].id && (
                               <>
                                 <button
-                                  className="text-gray-600 rounded px-1 py-1 ml-1 hover:underline"
+                                  className="text-gray-400 rounded px-1 py-1 ml-1 hover:underline"
                                   onClick={() =>                                  
                                     handleEditComment(comment)
                                   }
@@ -483,7 +485,7 @@ export default function ModalComponent(props){
                                   Edit
                                 </button>
                                 <button
-                                  className="text-gray-600 rounded px-1 py-1 hover:underline"
+                                  className="text-gray-400 rounded px-1 py-1 hover:underline"
                                   onClick={() => {
                                     handleDeleteComment(comment)
                                   }}
@@ -497,7 +499,7 @@ export default function ModalComponent(props){
                         <div class="commentReply ml-3 ">                       
                         {Array.isArray(comment.commentReplies) &&
                             comment.commentReplies.map((commentReplies, index) => (               
-                             <div key={commentReplies.id} className="border-b border-l pl-3 block pt-3 pb-1">
+                             <div key={commentReplies.id} className="border-b border-l pl-3 block pt-3 pb-1 border-black">
                                 <span>{commentReplies.text}</span>
                                 <div className="">
                                 {commentReplies.user && (
