@@ -219,7 +219,7 @@ export default function Home() {
                     />
               </div>
             ) : null}
-            <h2 className="text-2xl font-bold mb-2">Threads</h2>
+            <h2 className="text-2xl font-bold mb-2" id="thread-list-title">Threads</h2>
           {isLoading ? ( // Render loading icon while isLoading is true
             <div class="text-center pt-2">
                 <svg aria-hidden="true" class="inline w-10 h-10 mr-2 text-gray-200 animate-spin fill-blue-600 " viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
