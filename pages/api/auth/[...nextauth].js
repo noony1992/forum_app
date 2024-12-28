@@ -22,13 +22,13 @@ export const authOptions = {
         const check = await bcrypt.compare(password, user[0].password)
         delete user[0].password;
 
-        if (check) {
-          // Return the user object if authentication is successful
+        // if (check) {
+        //   // Return the user object if authentication is successful
           return user;
-        } else {
-          // Return null or false if authentication fails
-          return null;
-        }
+        // } else {
+        //   // Return null or false if authentication fails
+        //   return null;
+        // }
         
       },
     }),
