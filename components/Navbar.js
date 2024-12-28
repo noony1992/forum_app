@@ -7,12 +7,12 @@ import Link from 'next/link'
 function Navbar(){
     const session = useSession();
 
-    useEffect(() => {
-      if (session.status === "unauthenticated") {
-        // Redirect to login if user is not authenticated
-        Router.push('/login');
-      }
-    }, [session]);
+    // useEffect(() => {
+    //   if (session.status === "unauthenticated") {
+    //     // Redirect to login if user is not authenticated
+    //     Router.push('/login');
+    //   }
+    // }, [session]);
     let profilePicture = ''
 
     if(session?.data?.user[0]?.picture){
